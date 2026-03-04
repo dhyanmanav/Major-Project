@@ -3,7 +3,7 @@
    All module logic: Deepfake (ML API), Cyberbullying, Dark Web, Log Tamper
 ───────────────────────────────────────────────────────────────── */
 
-const API = 'http://localhost:5000/api';
+const API = 'https://major-project-te5y.onrender.com/api';
 
 /* ══════════════════════════════════════════════════════════════════
    GLOBAL STATE & HELPERS
@@ -11,13 +11,13 @@ const API = 'http://localhost:5000/api';
 const state = { scans: 0, threats: 0, warns: 0, safe: 0 };
 
 function updateSidebarStats() {
-  qs('#s-scans').textContent   = state.scans;
+  qs('#s-scans').textContent = state.scans;
   qs('#s-threats').textContent = state.threats;
-  qs('#s-safe').textContent    = state.safe;
-  qs('#d-scans').textContent   = state.scans;
+  qs('#s-safe').textContent = state.safe;
+  qs('#d-scans').textContent = state.scans;
   qs('#d-threats').textContent = state.threats;
-  qs('#d-warns').textContent   = state.warns;
-  qs('#d-safe').textContent    = state.safe;
+  qs('#d-warns').textContent = state.warns;
+  qs('#d-safe').textContent = state.safe;
 }
 
 function qs(sel, ctx = document) { return ctx.querySelector(sel); }
@@ -45,7 +45,7 @@ async function checkAPI() {
       el.innerHTML = '<span class="dot"></span> API Online';
       return true;
     }
-  } catch (_) {}
+  } catch (_) { }
   el.className = 'api-status offline';
   el.innerHTML = '<span class="dot"></span> API Offline (demo mode)';
   return false;
@@ -102,11 +102,11 @@ document.querySelectorAll('.nav-btn').forEach(btn => {
 let currentImageB64 = null;
 
 /* ── Dropzone setup ─────────────────────────────────────────────── */
-const dropzone  = qs('#dropzone');
+const dropzone = qs('#dropzone');
 const fileInput = qs('#fileInput');
 const previewImg = qs('#previewImg');
-const dzInner   = qs('#dzInner');
-const dfBtn     = qs('#dfAnalyseBtn');
+const dzInner = qs('#dzInner');
+const dfBtn = qs('#dfAnalyseBtn');
 
 dropzone.addEventListener('click', () => fileInput.click());
 dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
@@ -147,38 +147,38 @@ function loadSample(type) {
     g.addColorStop(0, '#f5c5a3'); g.addColorStop(0.6, '#e8956d'); g.addColorStop(1, '#2a1a0e');
     ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
     // Add natural noise
-    const id = ctx.getImageData(0,0,128,128);
-    for (let i=0;i<id.data.length;i+=4) {
-      const n = (Math.random()-0.5)*20;
-      id.data[i]+=n; id.data[i+1]+=n; id.data[i+2]+=n;
+    const id = ctx.getImageData(0, 0, 128, 128);
+    for (let i = 0; i < id.data.length; i += 4) {
+      const n = (Math.random() - 0.5) * 20;
+      id.data[i] += n; id.data[i + 1] += n; id.data[i + 2] += n;
     }
-    ctx.putImageData(id,0,0);
+    ctx.putImageData(id, 0, 0);
   } else if (type === 'fake') {
     // GAN-like: over-smooth + slight colour artifacts
     const g = ctx.createRadialGradient(64, 55, 5, 64, 55, 65);
     g.addColorStop(0, '#f8d0b0'); g.addColorStop(0.7, '#ebb080'); g.addColorStop(1, '#503020');
-    ctx.fillStyle = g; ctx.fillRect(0,0,128,128);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, 128, 128);
     // Periodic GAN grid artifact
-    for (let x=0;x<128;x+=8) {
-      ctx.strokeStyle='rgba(255,120,60,0.12)';
-      ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,128); ctx.stroke();
+    for (let x = 0; x < 128; x += 8) {
+      ctx.strokeStyle = 'rgba(255,120,60,0.12)';
+      ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, 128); ctx.stroke();
     }
-    const id = ctx.getImageData(0,0,128,128);
-    for (let i=0;i<id.data.length;i+=4) {
-      id.data[i]   += (Math.random()-0.5)*6;
-      id.data[i+2] += (Math.random()-0.5)*14; // channel imbalance
+    const id = ctx.getImageData(0, 0, 128, 128);
+    for (let i = 0; i < id.data.length; i += 4) {
+      id.data[i] += (Math.random() - 0.5) * 6;
+      id.data[i + 2] += (Math.random() - 0.5) * 14; // channel imbalance
     }
-    ctx.putImageData(id,0,0);
+    ctx.putImageData(id, 0, 0);
   } else {
     // Blended: half real, half fake
-    const g1 = ctx.createLinearGradient(0,0,128,0);
-    g1.addColorStop(0,'#f5c5a3'); g1.addColorStop(0.5,'#e896c0'); g1.addColorStop(1,'#7060f0');
-    ctx.fillStyle = g1; ctx.fillRect(0,0,128,128);
-    const id = ctx.getImageData(0,0,128,128);
-    for (let i=0;i<id.data.length;i+=4) {
-      const n=(Math.random()-0.5)*30; id.data[i]+=n; id.data[i+1]-=n*0.3;
+    const g1 = ctx.createLinearGradient(0, 0, 128, 0);
+    g1.addColorStop(0, '#f5c5a3'); g1.addColorStop(0.5, '#e896c0'); g1.addColorStop(1, '#7060f0');
+    ctx.fillStyle = g1; ctx.fillRect(0, 0, 128, 128);
+    const id = ctx.getImageData(0, 0, 128, 128);
+    for (let i = 0; i < id.data.length; i += 4) {
+      const n = (Math.random() - 0.5) * 30; id.data[i] += n; id.data[i + 1] -= n * 0.3;
     }
-    ctx.putImageData(id,0,0);
+    ctx.putImageData(id, 0, 0);
   }
 
   currentImageB64 = canvas.toDataURL('image/jpeg', 0.9);
@@ -235,21 +235,21 @@ async function runDeepfake() {
       time_ms: rnd(80, 200).toFixed(1),
       model: 'RandomForest-200-trees (demo)',
       features: {
-        'ELA Artifact Level':   isFake ? rnd(55, 90) : rnd(5, 25),
-        'Frequency Anomaly':    isFake ? rnd(60, 95) : rnd(3, 20),
-        'Edge Inconsistency':   isFake ? rnd(50, 85) : rnd(5, 22),
-        'Texture Uniformity':   isFake ? rnd(55, 88) : rnd(8, 25),
-        'Color Ch. Deviation':  isFake ? rnd(48, 80) : rnd(4, 18),
+        'ELA Artifact Level': isFake ? rnd(55, 90) : rnd(5, 25),
+        'Frequency Anomaly': isFake ? rnd(60, 95) : rnd(3, 20),
+        'Edge Inconsistency': isFake ? rnd(50, 85) : rnd(5, 22),
+        'Texture Uniformity': isFake ? rnd(55, 88) : rnd(8, 25),
+        'Color Ch. Deviation': isFake ? rnd(48, 80) : rnd(4, 18),
       }
     };
   }
 
   // Display result
-  const isFake   = result.verdict === 'FAKE';
-  const cls      = isFake ? 'threat' : 'safe';
-  const icon     = isFake ? '⚠️' : '✅';
-  const lbl      = isFake ? 'DEEPFAKE DETECTED' : 'GENUINE IMAGE';
-  const sub      = isFake
+  const isFake = result.verdict === 'FAKE';
+  const cls = isFake ? 'threat' : 'safe';
+  const icon = isFake ? '⚠️' : '✅';
+  const lbl = isFake ? 'DEEPFAKE DETECTED' : 'GENUINE IMAGE';
+  const sub = isFake
     ? `${result.fake_pct.toFixed(1)}% fake probability · High confidence`
     : `${result.real_pct.toFixed(1)}% real probability · Verified authentic`;
 
@@ -263,8 +263,8 @@ async function runDeepfake() {
       </div>
     </div>
     <div class="stat-detail">
-      <div class="sd-item"><div class="sd-label">Fake Probability</div><div class="sd-value ${isFake?'red':'green'}">${result.fake_pct.toFixed(1)}%</div></div>
-      <div class="sd-item"><div class="sd-label">Real Probability</div><div class="sd-value ${isFake?'green':'green'}">${result.real_pct.toFixed(1)}%</div></div>
+      <div class="sd-item"><div class="sd-label">Fake Probability</div><div class="sd-value ${isFake ? 'red' : 'green'}">${result.fake_pct.toFixed(1)}%</div></div>
+      <div class="sd-item"><div class="sd-label">Real Probability</div><div class="sd-value ${isFake ? 'green' : 'green'}">${result.real_pct.toFixed(1)}%</div></div>
       <div class="sd-item"><div class="sd-label">Confidence</div><div class="sd-value blue">${result.confidence.toFixed(1)}%</div></div>
       <div class="sd-item"><div class="sd-label">Analysis Time</div><div class="sd-value orange">${result.time_ms} ms</div></div>
     </div>
@@ -296,10 +296,10 @@ async function runDeepfake() {
 
 function setCBSample(text) { qs('#cbText').value = text; }
 
-const TOXIC_KW = ['loser','nobody likes','go away','regret','ugly','stupid',
-  'idiot','hate you','kill','die','worthless','pathetic','disgusting','freak',
-  'moron','shut up','dumb','useless','you should','exist'];
-const THREAT_KW = ['find out where','make you regret','i will hurt','you will pay'];
+const TOXIC_KW = ['loser', 'nobody likes', 'go away', 'regret', 'ugly', 'stupid',
+  'idiot', 'hate you', 'kill', 'die', 'worthless', 'pathetic', 'disgusting', 'freak',
+  'moron', 'shut up', 'dumb', 'useless', 'you should', 'exist'];
+const THREAT_KW = ['find out where', 'make you regret', 'i will hurt', 'you will pay'];
 
 function localCBScore(text) {
   const t = text.toLowerCase();
@@ -331,7 +331,7 @@ async function runCyberbully() {
         body: JSON.stringify({ text })
       });
       result = await resp.json();
-    } catch (_) {}
+    } catch (_) { }
   }
 
   if (!result) {
@@ -341,20 +341,20 @@ async function runCyberbully() {
       verdict: isToxic ? 'TOXIC' : 'CLEAN',
       score,
       labels: {
-        'Bullying':    isToxic ? score * rnd(0.7,1.0) : rnd(0,10),
-        'Harassment':  isToxic ? score * rnd(0.4,0.8) : rnd(0,8),
-        'Threat':      THREAT_KW.some(k => text.toLowerCase().includes(k)) ? score*0.85 : rnd(0,5),
-        'Hate Speech': isToxic ? score * rnd(0.1,0.4) : rnd(0,6),
-        'Profanity':   isToxic ? score * rnd(0.2,0.5) : rnd(0,8),
+        'Bullying': isToxic ? score * rnd(0.7, 1.0) : rnd(0, 10),
+        'Harassment': isToxic ? score * rnd(0.4, 0.8) : rnd(0, 8),
+        'Threat': THREAT_KW.some(k => text.toLowerCase().includes(k)) ? score * 0.85 : rnd(0, 5),
+        'Hate Speech': isToxic ? score * rnd(0.1, 0.4) : rnd(0, 6),
+        'Profanity': isToxic ? score * rnd(0.2, 0.5) : rnd(0, 8),
       }
     };
   }
 
   const isToxic = result.verdict === 'TOXIC';
-  const cls  = isToxic ? 'threat' : 'safe';
+  const cls = isToxic ? 'threat' : 'safe';
   const icon = isToxic ? '⚠️' : '✅';
-  const lbl  = isToxic ? 'TOXIC CONTENT DETECTED' : 'CONTENT CLEAR';
-  const sub  = `Toxicity score: ${result.score.toFixed(1)}% · Platform: ${platform}`;
+  const lbl = isToxic ? 'TOXIC CONTENT DETECTED' : 'CONTENT CLEAR';
+  const sub = `Toxicity score: ${result.score.toFixed(1)}% · Platform: ${platform}`;
 
   resultBox.className = '';
   resultBox.innerHTML = `
@@ -365,8 +365,10 @@ async function runCyberbully() {
 
   // Label scores
   let sHtml = '';
-  const labelColors = { Bullying:'fill-red', Harassment:'fill-orange', Threat:'fill-red',
-    'Hate Speech':'fill-orange', Profanity:'fill-purple' };
+  const labelColors = {
+    Bullying: 'fill-red', Harassment: 'fill-orange', Threat: 'fill-red',
+    'Hate Speech': 'fill-orange', Profanity: 'fill-purple'
+  };
   for (const [name, val] of Object.entries(result.labels)) {
     sHtml += meterHTML(name, Math.min(100, val), labelColors[name]);
   }
@@ -467,7 +469,7 @@ async function runDarkWeb() {
   const canvas = qs('#dwCanvas');
   const nodeCount = parseInt(qs('#dwNodes').value);
   const cat = qs('#dwCat').value;
-  const kw  = qs('#dwKw').value;
+  const kw = qs('#dwKw').value;
 
   const levelDist = [0.15, 0.25, 0.35, 0.25];
   const levels = ['critical', 'high', 'medium', 'low'];
@@ -485,7 +487,7 @@ async function runDarkWeb() {
   for (let i = 0; i < nodeCount; i++) {
     await sleep(70);
     const angle = ((i / nodeCount) * Math.PI * 2) - Math.PI / 2 + (Math.random() - 0.5) * 0.5;
-    const dist  = 55 + Math.random() * 75;
+    const dist = 55 + Math.random() * 75;
     const x = cx + Math.cos(angle) * dist;
     const y = cy + Math.sin(angle) * dist;
 
@@ -493,14 +495,14 @@ async function runDarkWeb() {
     let r = Math.random(), cum = 0, lIdx = 3;
     for (let j = 0; j < levelDist.length; j++) { cum += levelDist[j]; if (r < cum) { lIdx = j; break; } }
     const level = levels[lIdx];
-    const node  = { id: `N${(i+1).toString().padStart(2,'0')}`, x, y, r: 6 + Math.random() * 5, level };
+    const node = { id: `N${(i + 1).toString().padStart(2, '0')}`, x, y, r: 6 + Math.random() * 5, level };
     nodes.push(node);
     drawGraph(nodes, canvas);
 
     if (level === 'critical') critCount++;
     if (level === 'high') highCount++;
 
-    const lc = { critical:'log-err', high:'log-warn', medium:'log-info', low:'log-ok' }[level];
+    const lc = { critical: 'log-err', high: 'log-warn', medium: 'log-info', low: 'log-ok' }[level];
     addLog('dwLog', `Node ${node.id}: ${level.toUpperCase()} — ${fakeHash(6)}.onion`, lc);
 
     if (level === 'critical' || level === 'high') {
@@ -579,10 +581,10 @@ const LOG_SCENARIOS = {
 function setLog(key) { qs('#ltLog').value = LOG_SCENARIOS[key] || ''; }
 
 async function runLogTamper() {
-  const logText  = qs('#ltLog').value.trim();
+  const logText = qs('#ltLog').value.trim();
   if (!logText) { alert('Load a log scenario first.'); return; }
 
-  const method    = qs('#ltMethod').value;
+  const method = qs('#ltMethod').value;
   const resultBox = qs('#ltResult');
   resultBox.className = 'result-empty';
   resultBox.innerHTML = '<span><span class="spinner"></span>Verifying…</span>';
@@ -604,29 +606,29 @@ async function runLogTamper() {
         body: JSON.stringify({ log: logText })
       });
       result = await resp.json();
-    } catch (_) {}
+    } catch (_) { }
   }
 
   if (!result) {
-    const lines  = logText.split('\n').filter(l => l.trim());
+    const lines = logText.split('\n').filter(l => l.trim());
     const issues = [];
-    const times  = [];
+    const times = [];
     lines.forEach(l => { const m = l.match(/(\d{2}:\d{2}:\d{2})/); if (m) times.push(m[1]); });
     for (let i = 1; i < times.length; i++) {
-      if (times[i] < times[i - 1]) issues.push({ type: 'warn', msg: `Timestamp reversal at entry ${i+1}` });
+      if (times[i] < times[i - 1]) issues.push({ type: 'warn', msg: `Timestamp reversal at entry ${i + 1}` });
     }
-    if (logText.includes('MISSING'))   issues.push({ type: 'error', msg: 'Log sequence gap — entries may be deleted' });
+    if (logText.includes('MISSING')) issues.push({ type: 'error', msg: 'Log sequence gap — entries may be deleted' });
     if (logText.includes('sudo su') || logText.includes('unknown'))
-                                       issues.push({ type: 'error', msg: 'Privilege escalation pattern detected' });
+      issues.push({ type: 'error', msg: 'Privilege escalation pattern detected' });
     if (logText.includes('attacker') || logText.includes('etc/passwd'))
-                                       issues.push({ type: 'error', msg: 'Suspicious user / sensitive file access' });
+      issues.push({ type: 'error', msg: 'Suspicious user / sensitive file access' });
     result = { verdict: issues.length > 0 ? 'TAMPERED' : 'INTACT', issues, entries: lines.length };
   }
 
   const tampered = result.verdict === 'TAMPERED';
-  const cls  = tampered ? 'threat' : 'safe';
+  const cls = tampered ? 'threat' : 'safe';
   const icon = tampered ? '⚠️' : '✅';
-  const lbl  = tampered ? 'LOG TAMPERING DETECTED' : 'LOGS INTACT';
+  const lbl = tampered ? 'LOG TAMPERING DETECTED' : 'LOGS INTACT';
   const score = tampered ? Math.floor(rnd(15, 45)) : Math.floor(rnd(94, 99));
 
   resultBox.className = '';
@@ -637,8 +639,8 @@ async function runLogTamper() {
     </div>
     <div class="stat-detail">
       <div class="sd-item"><div class="sd-label">Entries Checked</div><div class="sd-value blue">${result.entries}</div></div>
-      <div class="sd-item"><div class="sd-label">Anomalies Found</div><div class="sd-value ${tampered?'red':'green'}">${result.issues.length}</div></div>
-      <div class="sd-item"><div class="sd-label">Integrity Score</div><div class="sd-value ${tampered?'orange':'green'}">${score}%</div></div>
+      <div class="sd-item"><div class="sd-label">Anomalies Found</div><div class="sd-value ${tampered ? 'red' : 'green'}">${result.issues.length}</div></div>
+      <div class="sd-item"><div class="sd-label">Integrity Score</div><div class="sd-value ${tampered ? 'orange' : 'green'}">${score}%</div></div>
       <div class="sd-item"><div class="sd-label">Method</div><div class="sd-value blue" style="font-size:0.75rem">${method.split(' ')[0]}</div></div>
     </div>`;
 
@@ -649,7 +651,7 @@ async function runLogTamper() {
   } else {
     result.issues.forEach(iss => {
       const cls2 = iss.type === 'error' ? 'error' : 'warn';
-      const ico  = iss.type === 'error' ? '🔴' : '⚠️';
+      const ico = iss.type === 'error' ? '🔴' : '⚠️';
       iHtml += `<div class="issue-item ${cls2}">${ico} ${iss.msg}</div>`;
     });
   }
